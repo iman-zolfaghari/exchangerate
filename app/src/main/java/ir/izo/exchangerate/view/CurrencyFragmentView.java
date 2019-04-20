@@ -32,7 +32,6 @@ public class CurrencyFragmentView extends BaseFragment {
 	private void buildModel(View view) {
 		currencyModel = new CurrencyModel();
 		currencyModel.setName((TextView) view.findViewById(R.id.name));
-
 	}
 
 	private void buildController() {

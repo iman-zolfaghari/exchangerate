@@ -24,7 +24,7 @@ public class CurrencyController {
 		showName();
 	}
 
-	public void showName() {
+	private void showName() {
 		String name = ApplicationConfig.get(ConfigEnum.NAME);
 		currencyModel.getName().setText(String.format("Hi %s", name));
 	}

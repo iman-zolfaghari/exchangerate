@@ -11,11 +11,11 @@
               tools:context="ir.izo.exchangerate.view.CurrencyFragmentView">
 
 
-                <TextView
-                        android:id="@+id/name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        />
+    <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+    />
 
 </LinearLayout>
