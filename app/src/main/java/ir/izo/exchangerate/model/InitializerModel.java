@@ -3,7 +3,7 @@ package ir.izo.exchangerate.model;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class HomeModel {
+public class InitializerModel {
 	private Button addNameButton;
 	private EditText name;
 
