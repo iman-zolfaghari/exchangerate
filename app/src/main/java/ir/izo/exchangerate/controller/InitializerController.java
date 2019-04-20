@@ -1,14 +1,15 @@
 package ir.izo.exchangerate.controller;
 
-import android.text.TextUtils;
+import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.config.ApplicationConfig;
 import ir.izo.exchangerate.enums.ConfigEnum;
 import ir.izo.exchangerate.enums.FragmentEnum;
-import ir.izo.exchangerate.exception.InvalidParamException;
 import ir.izo.exchangerate.model.InitializerModel;
-import ir.izo.exchangerate.util.AndroidUtil;
 import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.InitializerFragmentView;
+
+import static ir.izo.exchangerate.util.AndroidUtil.goToFragment;
+import static ir.izo.exchangerate.util.Validator.requireNonEmpty;
 
 /**
  * This class manages the home view.
@@ -16,21 +17,21 @@ import ir.izo.exchangerate.view.InitializerFragmentView;
 public class InitializerController {
 	private final static String TAG = InitializerController.class.getName();
 
-	private InitializerFragmentView initializerFragmentView;
-	private InitializerModel initializerModel;
+	private InitializerFragmentView view;
+	private InitializerModel model;
 
-	public InitializerController(InitializerFragmentView initializerFragmentView, InitializerModel initializerModel) {
-		this.initializerFragmentView = initializerFragmentView;
-		this.initializerModel = initializerModel;
+	public InitializerController(InitializerFragmentView view, InitializerModel model) {
+		this.view = view;
+		this.model = model;
 	}
 
 	public void addName() {
-		String name = initializerModel.getName().getText().toString();
+		String name = model.getName().getText().toString();
 		Logger.info(TAG, "The name is %s.", name);
-		if (TextUtils.isEmpty(name)) {
-			throw new InvalidParamException("Name is empty!");
-		}
+
+		requireNonEmpty(name, view, R.string.error_invalid_name);
+
 		ApplicationConfig.store(ConfigEnum.NAME, name);
-		AndroidUtil.goToFragment(FragmentEnum.CURRENCY_INITIALIZER, initializerFragmentView.getActivity());
+		goToFragment(FragmentEnum.FRAGMENT_CURRENCY, view.getActivity());
 	}
 }

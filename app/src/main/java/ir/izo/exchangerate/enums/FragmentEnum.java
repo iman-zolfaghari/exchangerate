@@ -6,7 +6,7 @@ import ir.izo.exchangerate.view.InitializerFragmentView;
 
 public enum FragmentEnum {
 	FRAGMENT_INITIALIZER(new InitializerFragmentView()),
-	CURRENCY_INITIALIZER(new CurrencyFragmentView()),;
+	FRAGMENT_CURRENCY(new CurrencyFragmentView()),;
 
 	private BaseFragment fragment;
 

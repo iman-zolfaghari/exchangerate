@@ -1,5 +1,6 @@
 package ir.izo.exchangerate.controller;
 
+import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.config.ApplicationConfig;
 import ir.izo.exchangerate.enums.ConfigEnum;
 import ir.izo.exchangerate.model.CurrencyModel;
@@ -11,12 +12,12 @@ import ir.izo.exchangerate.view.CurrencyFragmentView;
 public class CurrencyController {
 	private final static String TAG = CurrencyController.class.getName();
 
-	private CurrencyFragmentView currencyFragmentView;
-	private CurrencyModel currencyModel;
+	private CurrencyFragmentView view;
+	private CurrencyModel model;
 
-	public CurrencyController(CurrencyFragmentView currencyFragmentView, CurrencyModel currencyModel) {
-		this.currencyFragmentView = currencyFragmentView;
-		this.currencyModel = currencyModel;
+	public CurrencyController(CurrencyFragmentView view, CurrencyModel model) {
+		this.view = view;
+		this.model = model;
 		init();
 	}
 
@@ -26,6 +27,6 @@ public class CurrencyController {
 
 	private void showName() {
 		String name = ApplicationConfig.get(ConfigEnum.NAME);
-		currencyModel.getName().setText(String.format("Hi %s", name));
+		model.getName().setText(view.getString(R.string.message_hello, name));
 	}
 }
