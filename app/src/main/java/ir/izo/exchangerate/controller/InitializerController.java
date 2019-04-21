@@ -8,7 +8,7 @@ import ir.izo.exchangerate.model.InitializerModel;
 import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.InitializerFragmentView;
 
-import static ir.izo.exchangerate.util.AndroidUtil.goToFragment;
+import static ir.izo.exchangerate.util.AndroidUtil.goToFragmentWithoutBackStack;
 import static ir.izo.exchangerate.util.Validator.requireNonEmpty;
 
 /**
@@ -32,6 +32,6 @@ public class InitializerController {
 		requireNonEmpty(name, view, R.string.error_invalid_name);
 
 		ApplicationConfig.store(ConfigEnum.NAME, name);
-		goToFragment(FragmentEnum.FRAGMENT_CURRENCY, view.getActivity());
+		goToFragmentWithoutBackStack(FragmentEnum.FRAGMENT_CURRENCY, view.getActivity());
 	}
 }
