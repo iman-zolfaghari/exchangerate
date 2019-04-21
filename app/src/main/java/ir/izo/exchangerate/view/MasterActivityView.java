@@ -26,6 +26,6 @@ public class MasterActivityView extends AppCompatActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		masterController.showFirstFragment();
+		masterController.onStart();
 	}
 }

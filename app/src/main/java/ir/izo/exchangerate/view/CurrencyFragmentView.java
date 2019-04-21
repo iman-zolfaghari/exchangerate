@@ -2,6 +2,7 @@ package ir.izo.exchangerate.view;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.controller.CurrencyController;
@@ -32,6 +33,7 @@ public class CurrencyFragmentView extends BaseFragment {
 	private void buildModel(View view) {
 		currencyModel = new CurrencyModel();
 		currencyModel.setName((TextView) view.findViewById(R.id.name));
+		currencyModel.setCurrency((AutoCompleteTextView) view.findViewById(R.id.currency));
 	}
 
 	private void buildController() {

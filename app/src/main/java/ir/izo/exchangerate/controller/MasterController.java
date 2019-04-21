@@ -18,4 +18,8 @@ public class MasterController {
 		FragmentEnum fragment = TextUtils.isEmpty(ApplicationConfig.get(ConfigEnum.NAME)) ? FragmentEnum.FRAGMENT_INITIALIZER : FragmentEnum.FRAGMENT_CURRENCY;
 		AndroidUtil.goToFragmentWithoutBackStack(view, fragment);
 	}
+
+	public void onStart() {
+		showFirstFragment();
+	}
 }
