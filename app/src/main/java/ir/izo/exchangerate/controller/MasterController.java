@@ -16,7 +16,7 @@ public class MasterController {
 	}
 
 	private void init() {
-		FragmentEnum fragmentEnum = TextUtils.isEmpty(ApplicationConfig.get(ConfigEnum.NAME)) ? FragmentEnum.FRAGMENT_INITIALIZER : FragmentEnum.FRAGMENT_CURRENCY;
-		AndroidUtil.goToFragmentWithoutBackStack(fragmentEnum, view);
+		FragmentEnum fragment = TextUtils.isEmpty(ApplicationConfig.get(ConfigEnum.NAME)) ? FragmentEnum.FRAGMENT_INITIALIZER : FragmentEnum.FRAGMENT_CURRENCY;
+		AndroidUtil.goToFragmentWithoutBackStack(view, fragment);
 	}
 }

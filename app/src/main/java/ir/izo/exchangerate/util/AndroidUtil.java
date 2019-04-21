@@ -9,16 +9,16 @@ import ir.izo.exchangerate.view.BaseFragment;
 
 public class AndroidUtil {
 
-	public static void goToFragment(FragmentEnum fragmentEnum, Activity activity) {
-		goToFragment(R.id.fragment_place_holder, fragmentEnum.getFragment(), activity, true);
+	public static void goToFragment(Activity parentActivity, FragmentEnum fragment) {
+		goToFragment(parentActivity, fragment.getFragment(), R.id.fragment_place_holder, true);
 	}
 
-	public static void goToFragmentWithoutBackStack(FragmentEnum fragmentEnum, Activity activity) {
-		goToFragment(R.id.fragment_place_holder, fragmentEnum.getFragment(), activity, false);
+	public static void goToFragmentWithoutBackStack(Activity parentActivity, FragmentEnum fragment) {
+		goToFragment(parentActivity, fragment.getFragment(), R.id.fragment_place_holder, false);
 	}
 
-	public static void goToFragment(int fragmentPlaceHolderResourceId, BaseFragment fragment, Activity activity, boolean addToBackStack) {
-		FragmentManager fragmentManager = activity.getFragmentManager();
+	public static void goToFragment(Activity parentActivity, BaseFragment fragment, int fragmentPlaceHolderResourceId, boolean addToBackStack) {
+		FragmentManager fragmentManager = parentActivity.getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		fragmentTransaction.replace(fragmentPlaceHolderResourceId, fragment);
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
