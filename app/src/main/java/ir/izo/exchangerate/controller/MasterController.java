@@ -12,10 +12,9 @@ public class MasterController {
 
 	public MasterController(MasterActivityView view) {
 		this.view = view;
-		init();
 	}
 
-	private void init() {
+	public void showFirstFragment() {
 		FragmentEnum fragment = TextUtils.isEmpty(ApplicationConfig.get(ConfigEnum.NAME)) ? FragmentEnum.FRAGMENT_INITIALIZER : FragmentEnum.FRAGMENT_CURRENCY;
 		AndroidUtil.goToFragmentWithoutBackStack(view, fragment);
 	}
