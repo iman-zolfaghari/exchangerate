@@ -26,6 +26,7 @@ public class AndroidUtil {
 		fragmentTransaction.replace(fragmentPlaceHolderResourceId, fragment);
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		if (addToBackStack) {
+			//TODO : this is wrong! I should use previous fragment here.
 			fragmentTransaction.addToBackStack(fragment.getTag());
 		}
 		fragmentTransaction.commit();

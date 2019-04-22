@@ -9,6 +9,8 @@ import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.controller.CurrencyController;
 import ir.izo.exchangerate.model.CurrencyModel;
 
+import static ir.izo.exchangerate.util.AndroidUtil.handleException;
+
 /**
  * The home screen that gets currency for next usage.
  */
@@ -43,5 +45,15 @@ public class CurrencyFragmentView extends BaseFragment {
 	}
 
 	private void setActionListeners() {
+		currencyModel.getConvertButton().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				try {
+					currencyController.convert();
+				} catch (Exception e) {
+					handleException(getActivity(), e, null);
+				}
+			}
+		});
 	}
 }

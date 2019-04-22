@@ -7,8 +7,10 @@ import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.config.ApplicationConfig;
 import ir.izo.exchangerate.domain.Rate;
 import ir.izo.exchangerate.enums.ConfigEnum;
+import ir.izo.exchangerate.enums.FragmentEnum;
 import ir.izo.exchangerate.model.CurrencyModel;
 import ir.izo.exchangerate.restclient.BitcoinAverageRestClient;
+import ir.izo.exchangerate.util.AndroidUtil;
 import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.CurrencyFragmentView;
 import org.json.JSONException;
@@ -90,5 +92,9 @@ public class CurrencyController {
 	private void showName() {
 		String name = ApplicationConfig.get(ConfigEnum.NAME);
 		model.getName().setText(view.getString(R.string.message_hello, name));
+	}
+
+	public void convert() {
+		AndroidUtil.goToFragment(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY_VALUE);
 	}
 }
