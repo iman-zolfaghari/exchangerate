@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 public abstract class BaseFragment extends Fragment {
 
@@ -15,9 +14,5 @@ public abstract class BaseFragment extends Fragment {
 	}
 
 	protected abstract int getFragmentLayoutId();
-
-	protected void handleException(Exception e) {
-		Toast.makeText(this.getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-	}
 
 }

@@ -4,9 +4,13 @@
     <!-- Strings related to home -->
     <string name="prompt_name">Name</string>
     <string name="prompt_currency">Currency</string>
+
     <string name="action_add_name">Next</string>
+    <string name="action_convert">Convert</string>
 
     <string name="error_invalid_name">Name is empty!</string>
+    <string name="error_connection_problem">There is a network connection problem!</string>
+    <string name="error_internal_problem">There is an internal problem has happened!</string>
 
     <string name="message_hello">Hi %s</string>
 

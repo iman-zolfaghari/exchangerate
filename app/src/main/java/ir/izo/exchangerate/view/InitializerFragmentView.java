@@ -8,6 +8,8 @@ import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.controller.InitializerController;
 import ir.izo.exchangerate.model.InitializerModel;
 
+import static ir.izo.exchangerate.util.AndroidUtil.handleException;
+
 /**
  * The home screen that gets name for next usage.
  */
@@ -47,7 +49,7 @@ public class InitializerFragmentView extends BaseFragment {
 				try {
 					initializerController.addName();
 				} catch (Exception e) {
-					handleException(e);
+					handleException(getActivity(), e, null);
 				}
 			}
 		});

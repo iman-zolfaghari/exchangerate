@@ -15,7 +15,7 @@ import static ir.izo.exchangerate.util.Validator.requireNonEmpty;
  * This class manages the home view.
  */
 public class InitializerController {
-	private final static String TAG = InitializerController.class.getName();
+	private final static Logger logger = new Logger(InitializerController.class.getName());
 
 	private InitializerFragmentView view;
 	private InitializerModel model;
@@ -27,7 +27,7 @@ public class InitializerController {
 
 	public void addName() {
 		String name = model.getName().getText().toString();
-		Logger.info(TAG, "The name is %s.", name);
+		logger.info("The name is %s.", name);
 
 		requireNonEmpty(name, view, R.string.error_invalid_name);
 
