@@ -1,5 +1,8 @@
 package ir.izo.exchangerate.controller;
 
+import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import cz.msebera.android.httpclient.Header;
@@ -32,6 +35,9 @@ public class CurrencyController {
 	private CurrencyFragmentView view;
 	private CurrencyModel model;
 
+	private List<Rate> rates;
+	private Rate selectedRate;
+
 	public CurrencyController(CurrencyFragmentView view, CurrencyModel model) {
 		this.view = view;
 		this.model = model;
@@ -39,6 +45,7 @@ public class CurrencyController {
 	}
 
 	private void init() {
+		selectedRate = null;
 		model.getConvertButton().setEnabled(false);
 		showName();
 		getCurrencySymbols();
@@ -49,7 +56,7 @@ public class CurrencyController {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 				try {
-					List<Rate> rates = convertToRateList(response);
+					rates = convertToRateList(response);
 					fillRateAutoCompleteAdapter(rates);
 					model.getConvertButton().setEnabled(true);
 				} catch (JSONException e) {
@@ -95,6 +102,6 @@ public class CurrencyController {
 	}
 
 	public void convert() {
-		AndroidUtil.goToFragment(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY_VALUE);
+		AndroidUtil.goToFragment(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedRate);
 	}
 }
