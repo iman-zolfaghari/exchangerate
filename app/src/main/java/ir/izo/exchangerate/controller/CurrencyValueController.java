@@ -1,9 +1,12 @@
 package ir.izo.exchangerate.controller;
 
 import ir.izo.exchangerate.R;
+import ir.izo.exchangerate.domain.Rate;
 import ir.izo.exchangerate.model.CurrencyValueModel;
 import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.CurrencyValueFragmentView;
+
+import static ir.izo.exchangerate.enums.GlobalVariables.BUNDLE_DATA;
 
 /**
  * This class manages the currency value view.
@@ -22,7 +25,8 @@ public class CurrencyValueController {
 	}
 
 	private void init() {
-		model.getCurrencyValue().setText(view.getString(R.string.message_currency_value, "0"));
+		Rate rate = (Rate) view.getArguments().getSerializable(BUNDLE_DATA);
+		model.getCurrencyValue().setText(view.getString(R.string.message_currency_value, rate.getSymbol(), rate.getRate()));
 	}
 
 	public void back() {

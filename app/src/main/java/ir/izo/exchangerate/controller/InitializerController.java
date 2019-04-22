@@ -32,6 +32,6 @@ public class InitializerController {
 		requireNonEmpty(name, view, R.string.error_invalid_name);
 
 		ApplicationConfig.store(ConfigEnum.NAME, name);
-		goToFragmentWithoutBackStack(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY);
+		goToFragmentWithoutBackStack(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY, null);
 	}
 }

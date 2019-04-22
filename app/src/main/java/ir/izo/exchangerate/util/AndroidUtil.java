@@ -3,24 +3,33 @@ package ir.izo.exchangerate.util;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.Bundle;
 import android.widget.Toast;
 import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.enums.FragmentEnum;
 import ir.izo.exchangerate.view.BaseFragment;
 
+import java.io.Serializable;
+
+import static ir.izo.exchangerate.enums.GlobalVariables.BUNDLE_DATA;
+
 public class AndroidUtil {
 
 	private final static Logger logger = new Logger(AndroidUtil.class.getName());
 
-	public static void goToFragment(Activity parentActivity, FragmentEnum fragment) {
-		goToFragment(parentActivity, fragment.getFragment(), R.id.fragment_place_holder, true);
+	public static void goToFragment(Activity parentActivity, FragmentEnum fragment, Serializable data) {
+		goToFragment(parentActivity, fragment.getFragment(), data, R.id.fragment_place_holder, true);
 	}
 
-	public static void goToFragmentWithoutBackStack(Activity parentActivity, FragmentEnum fragment) {
-		goToFragment(parentActivity, fragment.getFragment(), R.id.fragment_place_holder, false);
+	public static void goToFragmentWithoutBackStack(Activity parentActivity, FragmentEnum fragment, Serializable data) {
+		goToFragment(parentActivity, fragment.getFragment(), data, R.id.fragment_place_holder, false);
 	}
 
-	public static void goToFragment(Activity parentActivity, BaseFragment fragment, int fragmentPlaceHolderResourceId, boolean addToBackStack) {
+	public static void goToFragment(Activity parentActivity, BaseFragment fragment, Serializable data, int fragmentPlaceHolderResourceId, boolean addToBackStack) {
+		Bundle args = new Bundle();
+		args.putSerializable(BUNDLE_DATA, data);
+		fragment.setArguments(args);
+
 		FragmentManager fragmentManager = parentActivity.getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		fragmentTransaction.replace(fragmentPlaceHolderResourceId, fragment);

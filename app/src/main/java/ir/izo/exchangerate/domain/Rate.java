@@ -1,6 +1,8 @@
 package ir.izo.exchangerate.domain;
 
-public class Rate {
+import java.io.Serializable;
+
+public class Rate implements Serializable {
 	private String symbol;
 	private double rate;
 	private String name;
