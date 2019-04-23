@@ -3,6 +3,7 @@ package ir.izo.exchangerate.view;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.controller.CurrencyValueController;
@@ -36,6 +37,7 @@ public class CurrencyValueFragmentView extends BaseFragment {
 		model = new CurrencyValueModel();
 		model.setCurrencyValue((TextView) view.findViewById(R.id.currency_value));
 		model.setBackButton((Button) view.findViewById(R.id.back_button));
+		model.setProgressBar((ProgressBar) view.findViewById(R.id.progress_bar));
 	}
 
 	private void buildController() {

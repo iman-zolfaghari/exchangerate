@@ -11,6 +11,9 @@ public class BitcoinAverageRestClient {
 	private static final String BASE_URL = "https://apiv2.bitcoinaverage.com";
 
 	private static AsyncHttpClient client = new AsyncHttpClient();
+	static {
+		client.setMaxRetriesAndTimeout(3, 5000);
+	}
 
 	public static void get(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
 		client.get(getAbsoluteUrl(url), params, responseHandler);
