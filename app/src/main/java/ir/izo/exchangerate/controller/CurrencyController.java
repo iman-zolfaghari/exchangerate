@@ -10,9 +10,9 @@ import ir.izo.exchangerate.config.ApplicationConfig;
 import ir.izo.exchangerate.domain.Rate;
 import ir.izo.exchangerate.enums.ConfigEnum;
 import ir.izo.exchangerate.enums.FragmentEnum;
+import ir.izo.exchangerate.enums.GlobalVariables;
 import ir.izo.exchangerate.model.CurrencyModel;
 import ir.izo.exchangerate.restclient.BitcoinAverageRestClient;
-import ir.izo.exchangerate.util.AndroidUtil;
 import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.CurrencyFragmentView;
 import org.json.JSONException;
@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static ir.izo.exchangerate.util.AndroidUtil.goToFragment;
 import static ir.izo.exchangerate.util.AndroidUtil.handleException;
 import static ir.izo.exchangerate.util.Validator.requireNonNull;
 
@@ -35,7 +36,6 @@ public class CurrencyController {
 	private CurrencyFragmentView view;
 	private CurrencyModel model;
 
-	private List<Rate> rates;
 	private Rate selectedRate;
 	private ArrayAdapter<Rate> adapter;
 
@@ -48,6 +48,7 @@ public class CurrencyController {
 	private void init() {
 		selectedRate = null;
 		model.getConvertButton().setEnabled(false);
+		model.getCurrency().setText("");
 		showName();
 		getCurrencySymbols();
 	}
@@ -57,10 +58,10 @@ public class CurrencyController {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 				try {
-					rates = convertToRateList(response);
-					fillRateAutoCompleteAdapter(rates);
-					model.getConvertButton().setEnabled(true);
+					GlobalVariables.setRates(convertToRateList(response));
+					fillRateAutoCompleteAdapter();
 				} catch (JSONException e) {
+					GlobalVariables.setRates(null);
 					handleException(view.getActivity(), e, view.getString(R.string.error_internal_problem));
 				}
 			}
@@ -70,7 +71,11 @@ public class CurrencyController {
 				handleException(view.getActivity(), throwable, view.getString(R.string.error_connection_problem));
 			}
 		};
-		BitcoinAverageRestClient.get("/constants/exchangerates/global", null, handler);
+		if (GlobalVariables.getRates() == null) {
+			BitcoinAverageRestClient.get("/constants/exchangerates/global", null, handler);
+		} else {
+			fillRateAutoCompleteAdapter();
+		}
 	}
 
 	private List<Rate> convertToRateList(JSONObject response) throws JSONException {
@@ -86,7 +91,9 @@ public class CurrencyController {
 		return rates;
 	}
 
-	private void fillRateAutoCompleteAdapter(List<Rate> rates) {
+	private void fillRateAutoCompleteAdapter() {
+		model.getConvertButton().setEnabled(true);
+		List<Rate> rates = GlobalVariables.getRates();
 		logger.info("Rate list size is : %s", rates.size());
 		adapter = new ArrayAdapter<>(view.getActivity(), android.R.layout.simple_dropdown_item_1line, rates);
 		model.getCurrency().setAdapter(adapter);
@@ -110,6 +117,6 @@ public class CurrencyController {
 
 	public void convert() {
 		requireNonNull(selectedRate, view, R.string.error_empty_selected_rate);
-		AndroidUtil.goToFragment(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedRate);
+		goToFragment(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedRate);
 	}
 }
