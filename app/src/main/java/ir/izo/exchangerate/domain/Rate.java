@@ -21,6 +21,15 @@ public class Rate implements Serializable {
 		this.rate = rate;
 	}
 
+	@Override
+	public String toString() {
+		return getSymbol() + " - " + getName();
+	}
+
+	public String getSymbol() {
+		return symbol;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -29,16 +38,7 @@ public class Rate implements Serializable {
 		this.name = name;
 	}
 
-	public String getSymbol() {
-		return symbol;
-	}
-
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
-	}
-
-	@Override
-	public String toString() {
-		return getSymbol() + " - " + getName();
 	}
 }

@@ -53,6 +53,11 @@ public class CurrencyController {
 		getCurrencySymbols();
 	}
 
+	private void showName() {
+		String name = ApplicationConfig.get(ConfigEnum.NAME);
+		model.getName().setText(view.getString(R.string.message_hello, name));
+	}
+
 	public void getCurrencySymbols() {
 		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 			@Override
@@ -108,11 +113,6 @@ public class CurrencyController {
 	private void selectRate(int position, long id) {
 		selectedRate = adapter.getItem(position);
 		logger.info("onItemClick id is %s and position is %s and symbol is %s !!!", id, position, selectedRate == null ? null : selectedRate.getSymbol());
-	}
-
-	private void showName() {
-		String name = ApplicationConfig.get(ConfigEnum.NAME);
-		model.getName().setText(view.getString(R.string.message_hello, name));
 	}
 
 	public void convert() {

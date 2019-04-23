@@ -22,10 +22,6 @@ public class AndroidUtil {
 		goToFragment(parentActivity, fragment.getFragment(), data, R.id.fragment_place_holder, true);
 	}
 
-	public static void goToFragmentWithoutBackStack(Activity parentActivity, FragmentEnum fragment, Serializable data) {
-		goToFragment(parentActivity, fragment.getFragment(), data, R.id.fragment_place_holder, false);
-	}
-
 	public static void goToFragment(Activity parentActivity, BaseFragment fragment, Serializable data, int fragmentPlaceHolderResourceId, boolean addToBackStack) {
 		Bundle args = new Bundle();
 		args.putSerializable(BUNDLE_DATA, data);
@@ -42,7 +38,11 @@ public class AndroidUtil {
 		fragmentTransaction.commit();
 	}
 
-	public static void goBack(Fragment fragment){
+	public static void goToFragmentWithoutBackStack(Activity parentActivity, FragmentEnum fragment, Serializable data) {
+		goToFragment(parentActivity, fragment.getFragment(), data, R.id.fragment_place_holder, false);
+	}
+
+	public static void goBack(Fragment fragment) {
 		fragment.getActivity().getFragmentManager().popBackStack();
 	}
 
