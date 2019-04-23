@@ -18,11 +18,11 @@ public class AndroidUtil {
 
 	private final static Logger logger = new Logger(AndroidUtil.class.getName());
 
-	public static void goToFragment(Activity parentActivity, FragmentEnum fragment, Serializable data) {
-		goToFragment(parentActivity, fragment.getFragment(), data, R.id.fragment_place_holder, true);
+	public static void goToFragment(BaseFragment currentFragment, FragmentEnum fragment, Serializable data) {
+		goToFragment(currentFragment.getActivity(), currentFragment, fragment.getFragment(), data, R.id.fragment_place_holder, true);
 	}
 
-	public static void goToFragment(Activity parentActivity, BaseFragment fragment, Serializable data, int fragmentPlaceHolderResourceId, boolean addToBackStack) {
+	public static void goToFragment(Activity parentActivity, BaseFragment currentFragment, BaseFragment fragment, Serializable data, int fragmentPlaceHolderResourceId, boolean addToBackStack) {
 		Bundle args = new Bundle();
 		args.putSerializable(BUNDLE_DATA, data);
 		fragment.setArguments(args);
@@ -32,14 +32,13 @@ public class AndroidUtil {
 		fragmentTransaction.replace(fragmentPlaceHolderResourceId, fragment);
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		if (addToBackStack) {
-			//TODO : this is wrong! I should use previous fragment here.
-			fragmentTransaction.addToBackStack(fragment.getTag());
+			fragmentTransaction.addToBackStack(currentFragment.getTag());
 		}
 		fragmentTransaction.commit();
 	}
 
 	public static void goToFragmentWithoutBackStack(Activity parentActivity, FragmentEnum fragment, Serializable data) {
-		goToFragment(parentActivity, fragment.getFragment(), data, R.id.fragment_place_holder, false);
+		goToFragment(parentActivity, null, fragment.getFragment(), data, R.id.fragment_place_holder, false);
 	}
 
 	public static void goBack(Fragment fragment) {

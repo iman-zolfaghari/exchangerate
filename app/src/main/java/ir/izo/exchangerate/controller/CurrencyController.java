@@ -117,6 +117,6 @@ public class CurrencyController {
 
 	public void convert() {
 		requireNonNull(selectedRate, view, R.string.error_empty_selected_rate);
-		goToFragment(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedRate);
+		goToFragment(view, FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedRate);
 	}
 }
