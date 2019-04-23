@@ -1,6 +1,7 @@
 package ir.izo.exchangerate.util;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -39,6 +40,10 @@ public class AndroidUtil {
 			fragmentTransaction.addToBackStack(fragment.getTag());
 		}
 		fragmentTransaction.commit();
+	}
+
+	public static void goBack(Fragment fragment){
+		fragment.getActivity().getFragmentManager().popBackStack();
 	}
 
 	public static void handleException(Activity activity, Throwable tr, String message) {

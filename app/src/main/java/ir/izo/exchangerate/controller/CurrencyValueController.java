@@ -7,6 +7,8 @@ import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.CurrencyValueFragmentView;
 
 import static ir.izo.exchangerate.enums.GlobalVariables.BUNDLE_DATA;
+import static ir.izo.exchangerate.util.AndroidUtil.goBack;
+import static ir.izo.exchangerate.util.Validator.requireNonNull;
 
 /**
  * This class manages the currency value view.
@@ -26,10 +28,11 @@ public class CurrencyValueController {
 
 	private void init() {
 		Rate rate = (Rate) view.getArguments().getSerializable(BUNDLE_DATA);
-		model.getCurrencyValue().setText(view.getString(R.string.message_currency_value, rate.getSymbol(), rate.getRate()));
+		requireNonNull(rate, view, R.string.error_empty_selected_rate);
+		model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), rate.getSymbol(), rate.getRate()));
 	}
 
 	public void back() {
-		//TODO back
+		goBack(view);
 	}
 }

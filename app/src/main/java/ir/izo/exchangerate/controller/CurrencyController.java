@@ -1,6 +1,5 @@
 package ir.izo.exchangerate.controller;
 
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static ir.izo.exchangerate.util.AndroidUtil.handleException;
+import static ir.izo.exchangerate.util.Validator.requireNonNull;
 
 /**
  * This class manages the currency view.
@@ -37,6 +37,7 @@ public class CurrencyController {
 
 	private List<Rate> rates;
 	private Rate selectedRate;
+	private ArrayAdapter<Rate> adapter;
 
 	public CurrencyController(CurrencyFragmentView view, CurrencyModel model) {
 		this.view = view;
@@ -87,14 +88,20 @@ public class CurrencyController {
 
 	private void fillRateAutoCompleteAdapter(List<Rate> rates) {
 		logger.info("Rate list size is : %s", rates.size());
-		List<String> items = new LinkedList<>();
-		for (Rate rate : rates) {
-			items.add(rate.getName() + " - " + rate.getSymbol());
-		}
-		ArrayAdapter<String> adapter = new ArrayAdapter<>(view.getActivity(), android.R.layout.simple_dropdown_item_1line, items);
+		adapter = new ArrayAdapter<>(view.getActivity(), android.R.layout.simple_dropdown_item_1line, rates);
 		model.getCurrency().setAdapter(adapter);
+		model.getCurrency().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				selectRate(position, id);
+			}
+		});
 	}
 
+	private void selectRate(int position, long id) {
+		selectedRate = adapter.getItem(position);
+		logger.info("onItemClick id is %s and position is %s and symbol is %s !!!", id, position, selectedRate == null ? null : selectedRate.getSymbol());
+	}
 
 	private void showName() {
 		String name = ApplicationConfig.get(ConfigEnum.NAME);
@@ -102,6 +109,7 @@ public class CurrencyController {
 	}
 
 	public void convert() {
+		requireNonNull(selectedRate, view, R.string.error_empty_selected_rate);
 		AndroidUtil.goToFragment(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedRate);
 	}
 }

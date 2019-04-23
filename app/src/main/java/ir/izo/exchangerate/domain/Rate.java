@@ -36,4 +36,9 @@ public class Rate implements Serializable {
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
+
+	@Override
+	public String toString() {
+		return getSymbol() + " - " + getName();
+	}
 }

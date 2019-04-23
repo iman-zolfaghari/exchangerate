@@ -11,4 +11,10 @@ public class Validator {
 		}
 	}
 
+	public static void requireNonNull(Object value, Fragment view, int errorMessagePatternId, Object... params) {
+		if (value == null) {
+			throw new IllegalArgumentException(view.getString(errorMessagePatternId, params));
+		}
+	}
+
 }
