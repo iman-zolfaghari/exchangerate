@@ -12,6 +12,7 @@ public abstract class BaseController<V extends MyView, M extends Model> implemen
 
 	@Override
 	public void init() {
+		logger.info("Controller is initializing...");
 	}
 
 	@Override

@@ -81,8 +81,8 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 	}
 
 	private void fillRateAutoCompleteAdapter() {
+		logger.info("Currency list size is : %s", currencies.size());
 		model.getConvertButton().setEnabled(true);
-		logger.info("Rate list size is : %s", currencies.size());
 		adapter = new ArrayAdapter<>(view.getActivity(), android.R.layout.simple_dropdown_item_1line, currencies);
 		model.getCurrency().setAdapter(adapter);
 		model.getCurrency().setOnItemClickListener(this::selectRate);
