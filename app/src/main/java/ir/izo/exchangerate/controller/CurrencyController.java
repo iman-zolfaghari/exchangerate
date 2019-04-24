@@ -11,13 +11,11 @@ import ir.izo.exchangerate.enums.FragmentEnum;
 import ir.izo.exchangerate.model.CurrencyModel;
 import ir.izo.exchangerate.restclient.BitcoinAverageRestClient;
 import ir.izo.exchangerate.view.CurrencyFragmentView;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
+import static ir.izo.exchangerate.restclient.BitcoinAverageRestClient.convertToCurrencyList;
 import static ir.izo.exchangerate.util.AndroidUtil.goToFragment;
 import static ir.izo.exchangerate.util.AndroidUtil.handleException;
 import static ir.izo.exchangerate.util.Validator.requireNonNull;
@@ -35,7 +33,7 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 	public void init() {
 		selectedCurrency = null;
 		model.getConvertButton().setEnabled(false);
-		model.getCurrency().setText("");
+		model.getCurrency().setText(null);
 		showName();
 		getCurrencySymbols();
 	}
@@ -55,7 +53,7 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 
 	private void onSuccessLoadCurrencies(JSONObject response) {
 		try {
-			currencies = convertToRateList(response);
+			currencies = convertToCurrencyList(response);
 			fillRateAutoCompleteAdapter();
 		} catch (Exception e) {
 			currencies = null;
@@ -67,34 +65,21 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 		handleException(view.getActivity(), throwable, view.getString(R.string.error_connection_problem));
 	}
 
-	private List<Currency> convertToRateList(JSONObject response) throws JSONException {
-		JSONObject ratesObject = response.getJSONObject("rates");
-		Iterator<String> rateNames = ratesObject.keys();
-		List<Currency> currencies = new LinkedList<>();
-		while (rateNames.hasNext()) {
-			String symbol = rateNames.next();
-			JSONObject rateObject = (JSONObject) ratesObject.get(symbol);
-			Currency currency = new Currency(symbol, rateObject.getDouble("rate"), rateObject.getString("name"));
-			currencies.add(currency);
-		}
-		return currencies;
-	}
-
 	private void fillRateAutoCompleteAdapter() {
 		logger.info("Currency list size is : %s", currencies.size());
 		model.getConvertButton().setEnabled(true);
 		adapter = new ArrayAdapter<>(view.getActivity(), android.R.layout.simple_dropdown_item_1line, currencies);
 		model.getCurrency().setAdapter(adapter);
-		model.getCurrency().setOnItemClickListener(this::selectRate);
 	}
 
-	private void selectRate(AdapterView<?> parent, View view, int position, long id) {
+	public void selectCurrency(AdapterView<?> parent, View view, int position, long id) {
 		selectedCurrency = adapter.getItem(position);
 		logger.info("onItemClick id is %s and position is %s and symbol is %s !!!", id, position, selectedCurrency == null ? null : selectedCurrency.getSymbol());
 	}
 
 	public void convert(View v) {
 		requireNonNull(selectedCurrency, view, R.string.error_empty_selected_currency);
+		model.getCurrency().setText(null);
 		goToFragment(view, FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedCurrency);
 	}
 }

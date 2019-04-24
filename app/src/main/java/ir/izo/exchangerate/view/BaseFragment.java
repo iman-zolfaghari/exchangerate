@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import ir.izo.exchangerate.controller.Controller;
 import ir.izo.exchangerate.model.Model;
 
@@ -48,4 +50,14 @@ public abstract class BaseFragment<M extends Model, V extends MyView, C extends 
 		});
 	}
 
+	protected final void addOnClickListener(AutoCompleteTextView view, AdapterView.OnItemClickListener listener) {
+		view.setOnItemClickListener((parent, view1, position, id) -> {
+			try {
+				listener.onItemClick(parent, view1, position, id);
+			} catch (Exception e) {
+				handleException(getActivity(), e, null);
+			}
+		});
+
+	}
 }

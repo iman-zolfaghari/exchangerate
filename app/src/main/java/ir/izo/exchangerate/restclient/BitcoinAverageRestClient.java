@@ -6,7 +6,13 @@ import com.loopj.android.http.RequestParams;
 import cz.msebera.android.httpclient.Header;
 import ir.izo.exchangerate.domain.Action;
 import ir.izo.exchangerate.domain.Consumer;
+import ir.izo.exchangerate.domain.Currency;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class BitcoinAverageRestClient {
 	//	curl https://apiv2.bitcoinaverage.com/constants/exchangerates/global
@@ -72,4 +78,19 @@ public class BitcoinAverageRestClient {
 	public static void loadCurrencies(Consumer<JSONObject> onSuccessConsumer, Consumer<Throwable> onFailureConsumer) {
 		BitcoinAverageRestClient.get(URL_CURRENCIES, null, null, null, onSuccessConsumer, onFailureConsumer);
 	}
+
+
+	public static List<Currency> convertToCurrencyList(JSONObject response) throws JSONException {
+		JSONObject ratesObject = response.getJSONObject("rates");
+		Iterator<String> rateNames = ratesObject.keys();
+		List<Currency> currencies = new LinkedList<>();
+		while (rateNames.hasNext()) {
+			String symbol = rateNames.next();
+			JSONObject rateObject = (JSONObject) ratesObject.get(symbol);
+			Currency currency = new Currency(symbol, rateObject.getDouble("rate"), rateObject.getString("name"));
+			currencies.add(currency);
+		}
+		return currencies;
+	}
+
 }

@@ -32,5 +32,6 @@ public class CurrencyFragmentView extends BaseFragment<CurrencyModel, CurrencyFr
 	@Override
 	protected void addListeners(CurrencyModel model, CurrencyController controller) {
 		addOnClickListener(model.getConvertButton(), controller::convert);
+		addOnClickListener(model.getCurrency(), controller::selectCurrency);
 	}
 }
