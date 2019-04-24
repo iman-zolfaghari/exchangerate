@@ -4,19 +4,23 @@ import ir.izo.exchangerate.model.Model;
 import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.MyView;
 
-public abstract class BaseController<V extends MyView, M extends Model> {
+public abstract class BaseController<V extends MyView, M extends Model> implements Controller<V, M> {
 	protected final Logger logger = new Logger(getClass().getName());
 
 	protected V view;
 	protected M model;
 
-	public BaseController(V view, M model) {
+	@Override
+	public void init() {
+	}
+
+	@Override
+	public void setView(V view) {
 		this.view = view;
+	}
+
+	@Override
+	public void setModel(M model) {
 		this.model = model;
-		init();
 	}
-
-	protected void init() {
-	}
-
 }

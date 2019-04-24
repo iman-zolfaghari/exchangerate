@@ -1,6 +1,5 @@
 package ir.izo.exchangerate.view;
 
-import android.os.Bundle;
 import android.view.View;
 import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.controller.CurrencyValueController;
@@ -9,9 +8,7 @@ import ir.izo.exchangerate.model.CurrencyValueModel;
 /**
  * The screen that shows currency.
  */
-public class CurrencyValueFragmentView extends BaseFragment implements MyView {
-
-	private CurrencyValueController controller;
+public class CurrencyValueFragmentView extends BaseFragment<CurrencyValueModel, CurrencyValueFragmentView, CurrencyValueController> {
 
 	@Override
 	protected int getFragmentLayoutId() {
@@ -19,16 +16,7 @@ public class CurrencyValueFragmentView extends BaseFragment implements MyView {
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-
-		CurrencyValueModel model = buildModel(view);
-		controller = new CurrencyValueController(this, model);
-		addOnClickListener(model.getBackButton(), controller::back);
-
-	}
-
-	private CurrencyValueModel buildModel(View view) {
+	protected CurrencyValueModel buildModel(View view) {
 		CurrencyValueModel model = new CurrencyValueModel();
 		model.setCurrencyValue(view.findViewById(R.id.currency_value));
 		model.setBackButton(view.findViewById(R.id.back_button));
@@ -36,4 +24,13 @@ public class CurrencyValueFragmentView extends BaseFragment implements MyView {
 		return model;
 	}
 
+	@Override
+	protected CurrencyValueController createController() {
+		return new CurrencyValueController();
+	}
+
+	@Override
+	protected void addListeners(CurrencyValueModel model, CurrencyValueController controller) {
+		addOnClickListener(model.getBackButton(), controller::back);
+	}
 }

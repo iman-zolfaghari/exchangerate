@@ -1,8 +1,6 @@
 package ir.izo.exchangerate.controller;
 
 import android.view.View;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import cz.msebera.android.httpclient.Header;
 import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.domain.Rate;
 import ir.izo.exchangerate.model.CurrencyValueModel;
@@ -23,44 +21,34 @@ public class CurrencyValueController extends BaseController<CurrencyValueFragmen
 
 	private Rate rate;
 
-	public CurrencyValueController(CurrencyValueFragmentView view, CurrencyValueModel model) {
-		super(view, model);
-	}
-
-	protected void init() {
+	public void init() {
 		rate = (Rate) view.getArguments().getSerializable(BUNDLE_DATA);
 		requireNonNull(rate, view, R.string.error_empty_selected_rate);
 		model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), "?", 0.0));
 
-		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-			@Override
-			public void onStart() {
-				model.getProgressBar().setVisibility(View.VISIBLE);
-			}
+		BitcoinAverageRestClient.loadBitcoinPrice(rate.getSymbol(), this::onStartLoadCurrencyValue,
+				this::onFinishLoadCurrencyValue, this::onSuccessLoadCurrencyValue, this::onFailureLoadCurrencyValue);
+	}
 
-			@Override
-			public void onFinish() {
-				model.getProgressBar().setVisibility(View.INVISIBLE);
-			}
+	private void onFailureLoadCurrencyValue(Throwable throwable) {
+		handleException(view.getActivity(), throwable, view.getString(R.string.error_connection_problem));
+	}
 
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-				try {
-					double price = response.getDouble("price");
-					model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), rate.getSymbol(), price));
+	private void onSuccessLoadCurrencyValue(JSONObject response) {
+		try {
+			double price = response.getDouble("price");
+			model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), rate.getSymbol(), price));
+		} catch (JSONException e) {
+			handleException(view.getActivity(), e, view.getString(R.string.error_internal_problem));
+		}
+	}
 
-				} catch (JSONException e) {
-					handleException(view.getActivity(), e, view.getString(R.string.error_internal_problem));
-				}
-			}
+	private void onFinishLoadCurrencyValue() {
+		model.getProgressBar().setVisibility(View.INVISIBLE);
+	}
 
-			@Override
-			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-				handleException(view.getActivity(), throwable, view.getString(R.string.error_connection_problem));
-			}
-		};
-		BitcoinAverageRestClient.get(String.format("/convert/global?from=BTC&to=%s&amount=1", rate.getSymbol()), null, handler);
-
+	private void onStartLoadCurrencyValue() {
+		model.getProgressBar().setVisibility(View.VISIBLE);
 	}
 
 	public void back(View v) {

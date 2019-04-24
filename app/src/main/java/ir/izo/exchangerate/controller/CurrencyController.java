@@ -3,8 +3,6 @@ package ir.izo.exchangerate.controller;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import cz.msebera.android.httpclient.Header;
 import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.config.ApplicationConfig;
 import ir.izo.exchangerate.domain.Rate;
@@ -27,18 +25,14 @@ import static ir.izo.exchangerate.util.Validator.requireNonNull;
 /**
  * This class manages the currency view.
  */
-public class CurrencyController  extends BaseController<CurrencyFragmentView, CurrencyModel> {
+public class CurrencyController extends BaseController<CurrencyFragmentView, CurrencyModel> {
 
 	private static List<Rate> rates;
 
 	private Rate selectedRate;
 	private ArrayAdapter<Rate> adapter;
 
-	public CurrencyController(CurrencyFragmentView view, CurrencyModel model) {
-		super(view, model);
-	}
-
-	protected void init() {
+	public void init() {
 		selectedRate = null;
 		model.getConvertButton().setEnabled(false);
 		model.getCurrency().setText("");
@@ -52,28 +46,25 @@ public class CurrencyController  extends BaseController<CurrencyFragmentView, Cu
 	}
 
 	public void getCurrencySymbols() {
-		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-				try {
-					rates = convertToRateList(response);
-					fillRateAutoCompleteAdapter();
-				} catch (Exception e) {
-					rates = null;
-					handleException(view.getActivity(), e, view.getString(R.string.error_internal_problem));
-				}
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-				handleException(view.getActivity(), throwable, view.getString(R.string.error_connection_problem));
-			}
-		};
 		if (rates == null) {
-			BitcoinAverageRestClient.get("/constants/exchangerates/global", null, handler);
+			BitcoinAverageRestClient.loadCurrencies(this::onSuccessLoadCurrencies, this::onFailureLoadCurrencies);
 		} else {
 			fillRateAutoCompleteAdapter();
 		}
+	}
+
+	private void onSuccessLoadCurrencies(JSONObject response) {
+		try {
+			rates = convertToRateList(response);
+			fillRateAutoCompleteAdapter();
+		} catch (Exception e) {
+			rates = null;
+			handleException(view.getActivity(), e, view.getString(R.string.error_internal_problem));
+		}
+	}
+
+	private void onFailureLoadCurrencies(Throwable throwable) {
+		handleException(view.getActivity(), throwable, view.getString(R.string.error_connection_problem));
 	}
 
 	private List<Rate> convertToRateList(JSONObject response) throws JSONException {
