@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import ir.izo.exchangerate.controller.Controller;
 import ir.izo.exchangerate.model.Model;
+import ir.izo.exchangerate.util.Logger;
 
 import static ir.izo.exchangerate.util.AndroidUtil.handleException;
 
 public abstract class BaseFragment<M extends Model, V extends MyView, C extends Controller<V, M>> extends Fragment implements MyView {
+	protected final Logger logger = new Logger(getClass().getName());
 
 	protected abstract int getFragmentLayoutId();
 
@@ -40,9 +43,10 @@ public abstract class BaseFragment<M extends Model, V extends MyView, C extends 
 		controller.init();
 	}
 
-	protected final void addOnClickListener(View view, View.OnClickListener listener) {
+	protected final void addOnClickListener(Button view, View.OnClickListener listener) {
 		view.setOnClickListener(v -> {
 			try {
+				logger.info("Button \"%s\" has clicked!", view.getText());
 				listener.onClick(v);
 			} catch (Exception e) {
 				handleException(getActivity(), e, null);
