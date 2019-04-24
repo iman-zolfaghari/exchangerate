@@ -12,11 +12,13 @@ import ir.izo.exchangerate.view.BaseFragment;
 
 import java.io.Serializable;
 
-import static ir.izo.exchangerate.enums.GlobalVariables.BUNDLE_DATA;
-
+/**
+ * AndroidUtil contains some utility methods(like working with fragments, activities, ...) for only android.
+ */
 public class AndroidUtil {
 
 	private final static Logger logger = new Logger(AndroidUtil.class.getName());
+	public static final String BUNDLE_DATA = "bundle-data";
 
 	public static void goToFragment(BaseFragment currentFragment, FragmentEnum fragment, Serializable data) {
 		goToFragment(currentFragment.getActivity(), currentFragment, fragment.getFragment(), data, R.id.fragment_place_holder, true);

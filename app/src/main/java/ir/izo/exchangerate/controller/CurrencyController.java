@@ -10,7 +10,6 @@ import ir.izo.exchangerate.config.ApplicationConfig;
 import ir.izo.exchangerate.domain.Rate;
 import ir.izo.exchangerate.enums.ConfigEnum;
 import ir.izo.exchangerate.enums.FragmentEnum;
-import ir.izo.exchangerate.enums.GlobalVariables;
 import ir.izo.exchangerate.model.CurrencyModel;
 import ir.izo.exchangerate.restclient.BitcoinAverageRestClient;
 import ir.izo.exchangerate.util.Logger;
@@ -32,6 +31,8 @@ import static ir.izo.exchangerate.util.Validator.requireNonNull;
 public class CurrencyController {
 
 	private final static Logger logger = new Logger(CurrencyController.class.getName());
+
+	private static List<Rate> rates;
 
 	private CurrencyFragmentView view;
 	private CurrencyModel model;
@@ -63,10 +64,10 @@ public class CurrencyController {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 				try {
-					GlobalVariables.setRates(convertToRateList(response));
+					rates = convertToRateList(response);
 					fillRateAutoCompleteAdapter();
 				} catch (JSONException e) {
-					GlobalVariables.setRates(null);
+					rates = null;
 					handleException(view.getActivity(), e, view.getString(R.string.error_internal_problem));
 				}
 			}
@@ -76,7 +77,7 @@ public class CurrencyController {
 				handleException(view.getActivity(), throwable, view.getString(R.string.error_connection_problem));
 			}
 		};
-		if (GlobalVariables.getRates() == null) {
+		if (rates == null) {
 			BitcoinAverageRestClient.get("/constants/exchangerates/global", null, handler);
 		} else {
 			fillRateAutoCompleteAdapter();
@@ -98,7 +99,6 @@ public class CurrencyController {
 
 	private void fillRateAutoCompleteAdapter() {
 		model.getConvertButton().setEnabled(true);
-		List<Rate> rates = GlobalVariables.getRates();
 		logger.info("Rate list size is : %s", rates.size());
 		adapter = new ArrayAdapter<>(view.getActivity(), android.R.layout.simple_dropdown_item_1line, rates);
 		model.getCurrency().setAdapter(adapter);

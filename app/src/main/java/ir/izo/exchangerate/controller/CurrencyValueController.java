@@ -12,7 +12,7 @@ import ir.izo.exchangerate.view.CurrencyValueFragmentView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static ir.izo.exchangerate.enums.GlobalVariables.BUNDLE_DATA;
+import static ir.izo.exchangerate.util.AndroidUtil.BUNDLE_DATA;
 import static ir.izo.exchangerate.util.AndroidUtil.goBack;
 import static ir.izo.exchangerate.util.AndroidUtil.handleException;
 import static ir.izo.exchangerate.util.Validator.requireNonNull;
