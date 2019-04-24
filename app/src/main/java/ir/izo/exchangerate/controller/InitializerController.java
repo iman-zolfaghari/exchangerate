@@ -10,34 +10,26 @@ import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.InitializerFragmentView;
 
 import static ir.izo.exchangerate.util.AndroidUtil.goToFragmentWithoutBackStack;
-import static ir.izo.exchangerate.util.AndroidUtil.handleException;
 import static ir.izo.exchangerate.util.Validator.requireNonEmpty;
 
 /**
  * This class manages the home view.
  */
-public class InitializerController {
+public class InitializerController extends BaseController<InitializerFragmentView, InitializerModel>{
 	private final static Logger logger = new Logger(InitializerController.class.getName());
 
-	private InitializerFragmentView view;
-	private InitializerModel model;
 
 	public InitializerController(InitializerFragmentView view, InitializerModel model) {
-		this.view = view;
-		this.model = model;
+		super(view, model);
 	}
 
 	public void addName(View v) {
-		try {
-			String name = model.getName().getText().toString();
-			logger.info("The name is %s.", name);
+		String name = model.getName().getText().toString();
+		logger.info("The name is %s.", name);
 
-			requireNonEmpty(name, view, R.string.error_invalid_name);
+		requireNonEmpty(name, view, R.string.error_invalid_name);
 
-			ApplicationConfig.store(ConfigEnum.NAME, name);
-			goToFragmentWithoutBackStack(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY, null);
-		} catch (Exception e) {
-			handleException(view.getActivity(), e, null);
-		}
+		ApplicationConfig.store(ConfigEnum.NAME, name);
+		goToFragmentWithoutBackStack(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY, null);
 	}
 }

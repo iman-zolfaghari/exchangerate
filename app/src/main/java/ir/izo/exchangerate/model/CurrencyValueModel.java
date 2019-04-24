@@ -4,7 +4,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class CurrencyValueModel {
+public class CurrencyValueModel implements Model{
 
 	private TextView currencyValue;
 	private Button backButton;

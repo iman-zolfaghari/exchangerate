@@ -9,8 +9,8 @@ import ir.izo.exchangerate.model.CurrencyValueModel;
 /**
  * The screen that shows currency.
  */
-public class CurrencyValueFragmentView extends BaseFragment {
-	private CurrencyValueModel model;
+public class CurrencyValueFragmentView extends BaseFragment implements MyView {
+
 	private CurrencyValueController controller;
 
 	@Override
@@ -21,18 +21,19 @@ public class CurrencyValueFragmentView extends BaseFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		buildModel(view);
 
+		CurrencyValueModel model = buildModel(view);
 		controller = new CurrencyValueController(this, model);
+		addOnClickListener(model.getBackButton(), controller::back);
 
-		model.getBackButton().setOnClickListener(controller::back);
 	}
 
-	private void buildModel(View view) {
-		model = new CurrencyValueModel();
+	private CurrencyValueModel buildModel(View view) {
+		CurrencyValueModel model = new CurrencyValueModel();
 		model.setCurrencyValue(view.findViewById(R.id.currency_value));
 		model.setBackButton(view.findViewById(R.id.back_button));
 		model.setProgressBar(view.findViewById(R.id.progress_bar));
+		return model;
 	}
 
 }

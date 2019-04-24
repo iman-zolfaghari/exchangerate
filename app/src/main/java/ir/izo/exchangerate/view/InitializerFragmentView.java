@@ -9,8 +9,7 @@ import ir.izo.exchangerate.model.InitializerModel;
 /**
  * The home screen that gets name for next usage.
  */
-public class InitializerFragmentView extends BaseFragment {
-	private InitializerModel model;
+public class InitializerFragmentView extends BaseFragment implements MyView{
 	private InitializerController controller;
 
 	@Override
@@ -21,17 +20,19 @@ public class InitializerFragmentView extends BaseFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		buildModel(view);
+
+		InitializerModel model = buildModel(view);
 
 		controller = new InitializerController(this, model);
 
-		model.getAddNameButton().setOnClickListener(controller::addName);
+		addOnClickListener(model.getAddNameButton(), controller::addName);
 	}
 
-	private void buildModel(View view) {
-		model = new InitializerModel();
+	private InitializerModel buildModel(View view) {
+		InitializerModel model = new InitializerModel();
 		model.setAddNameButton(view.findViewById(R.id.add_name_button));
 		model.setName(view.findViewById(R.id.name));
+		return model;
 	}
 
 }

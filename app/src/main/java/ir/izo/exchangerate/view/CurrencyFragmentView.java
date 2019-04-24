@@ -9,8 +9,7 @@ import ir.izo.exchangerate.model.CurrencyModel;
 /**
  * The home screen that gets currency for next usage.
  */
-public class CurrencyFragmentView extends BaseFragment {
-	private CurrencyModel model;
+public class CurrencyFragmentView extends BaseFragment implements MyView {
 	private CurrencyController controller;
 
 	@Override
@@ -21,18 +20,19 @@ public class CurrencyFragmentView extends BaseFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		buildModel(view);
 
+		CurrencyModel model = buildModel(view);
 		controller = new CurrencyController(this, model);
+		addOnClickListener(model.getConvertButton(), controller::convert);
 
-		model.getConvertButton().setOnClickListener(controller::convert);
 	}
 
-	private void buildModel(View view) {
-		model = new CurrencyModel();
+	private CurrencyModel buildModel(View view) {
+		CurrencyModel model = new CurrencyModel();
 		model.setName(view.findViewById(R.id.name));
 		model.setCurrency(view.findViewById(R.id.currency));
 		model.setConvertButton(view.findViewById(R.id.convert_button));
+		return model;
 	}
 
 }

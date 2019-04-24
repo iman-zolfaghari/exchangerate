@@ -4,7 +4,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class CurrencyModel {
+public class CurrencyModel implements Model{
 
 	private TextView name;
 	private AutoCompleteTextView currency;

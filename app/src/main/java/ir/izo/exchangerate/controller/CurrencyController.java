@@ -12,7 +12,6 @@ import ir.izo.exchangerate.enums.ConfigEnum;
 import ir.izo.exchangerate.enums.FragmentEnum;
 import ir.izo.exchangerate.model.CurrencyModel;
 import ir.izo.exchangerate.restclient.BitcoinAverageRestClient;
-import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.CurrencyFragmentView;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,25 +27,18 @@ import static ir.izo.exchangerate.util.Validator.requireNonNull;
 /**
  * This class manages the currency view.
  */
-public class CurrencyController {
-
-	private final static Logger logger = new Logger(CurrencyController.class.getName());
+public class CurrencyController  extends BaseController<CurrencyFragmentView, CurrencyModel> {
 
 	private static List<Rate> rates;
-
-	private CurrencyFragmentView view;
-	private CurrencyModel model;
 
 	private Rate selectedRate;
 	private ArrayAdapter<Rate> adapter;
 
 	public CurrencyController(CurrencyFragmentView view, CurrencyModel model) {
-		this.view = view;
-		this.model = model;
-		init();
+		super(view, model);
 	}
 
-	private void init() {
+	protected void init() {
 		selectedRate = null;
 		model.getConvertButton().setEnabled(false);
 		model.getCurrency().setText("");
@@ -66,7 +58,7 @@ public class CurrencyController {
 				try {
 					rates = convertToRateList(response);
 					fillRateAutoCompleteAdapter();
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					rates = null;
 					handleException(view.getActivity(), e, view.getString(R.string.error_internal_problem));
 				}

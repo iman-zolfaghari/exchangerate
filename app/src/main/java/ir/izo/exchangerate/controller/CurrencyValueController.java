@@ -7,7 +7,6 @@ import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.domain.Rate;
 import ir.izo.exchangerate.model.CurrencyValueModel;
 import ir.izo.exchangerate.restclient.BitcoinAverageRestClient;
-import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.CurrencyValueFragmentView;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,22 +19,15 @@ import static ir.izo.exchangerate.util.Validator.requireNonNull;
 /**
  * This class manages the currency value view.
  */
-public class CurrencyValueController {
-
-	private final static Logger logger = new Logger(CurrencyValueController.class.getName());
-
-	private CurrencyValueFragmentView view;
-	private CurrencyValueModel model;
+public class CurrencyValueController extends BaseController<CurrencyValueFragmentView, CurrencyValueModel> {
 
 	private Rate rate;
 
 	public CurrencyValueController(CurrencyValueFragmentView view, CurrencyValueModel model) {
-		this.view = view;
-		this.model = model;
-		init();
+		super(view, model);
 	}
 
-	private void init() {
+	protected void init() {
 		rate = (Rate) view.getArguments().getSerializable(BUNDLE_DATA);
 		requireNonNull(rate, view, R.string.error_empty_selected_rate);
 		model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), "?", 0.0));
@@ -72,10 +64,6 @@ public class CurrencyValueController {
 	}
 
 	public void back(View v) {
-		try {
-			goBack(view);
-		} catch (Exception e) {
-			handleException(view.getActivity(), e, null);
-		}
+		goBack(view);
 	}
 }
