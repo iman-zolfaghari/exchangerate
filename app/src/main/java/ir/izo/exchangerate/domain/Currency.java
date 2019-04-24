@@ -2,12 +2,12 @@ package ir.izo.exchangerate.domain;
 
 import java.io.Serializable;
 
-public class Rate implements Serializable {
+public class Currency implements Serializable {
 	private String symbol;
 	private double rate;
 	private String name;
 
-	public Rate(String symbol, double rate, String name) {
+	public Currency(String symbol, double rate, String name) {
 		this.rate = rate;
 		this.name = name;
 		this.symbol = symbol;

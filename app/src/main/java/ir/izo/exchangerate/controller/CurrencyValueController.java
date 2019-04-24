@@ -2,7 +2,7 @@ package ir.izo.exchangerate.controller;
 
 import android.view.View;
 import ir.izo.exchangerate.R;
-import ir.izo.exchangerate.domain.Rate;
+import ir.izo.exchangerate.domain.Currency;
 import ir.izo.exchangerate.model.CurrencyValueModel;
 import ir.izo.exchangerate.restclient.BitcoinAverageRestClient;
 import ir.izo.exchangerate.view.CurrencyValueFragmentView;
@@ -19,14 +19,14 @@ import static ir.izo.exchangerate.util.Validator.requireNonNull;
  */
 public class CurrencyValueController extends BaseController<CurrencyValueFragmentView, CurrencyValueModel> {
 
-	private Rate rate;
+	private Currency currency;
 
 	public void init() {
-		rate = (Rate) view.getArguments().getSerializable(BUNDLE_DATA);
-		requireNonNull(rate, view, R.string.error_empty_selected_rate);
+		currency = (Currency) view.getArguments().getSerializable(BUNDLE_DATA);
+		requireNonNull(currency, view, R.string.error_empty_selected_currency);
 		model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), "?", 0.0));
 
-		BitcoinAverageRestClient.loadBitcoinPrice(rate.getSymbol(), this::onStartLoadCurrencyValue,
+		BitcoinAverageRestClient.loadBitcoinPrice(currency.getSymbol(), this::onStartLoadCurrencyValue,
 				this::onFinishLoadCurrencyValue, this::onSuccessLoadCurrencyValue, this::onFailureLoadCurrencyValue);
 	}
 
@@ -37,7 +37,7 @@ public class CurrencyValueController extends BaseController<CurrencyValueFragmen
 	private void onSuccessLoadCurrencyValue(JSONObject response) {
 		try {
 			double price = response.getDouble("price");
-			model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), rate.getSymbol(), price));
+			model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), currency.getSymbol(), price));
 		} catch (JSONException e) {
 			handleException(view.getActivity(), e, view.getString(R.string.error_internal_problem));
 		}

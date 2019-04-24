@@ -5,7 +5,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.config.ApplicationConfig;
-import ir.izo.exchangerate.domain.Rate;
+import ir.izo.exchangerate.domain.Currency;
 import ir.izo.exchangerate.enums.ConfigEnum;
 import ir.izo.exchangerate.enums.FragmentEnum;
 import ir.izo.exchangerate.model.CurrencyModel;
@@ -27,13 +27,13 @@ import static ir.izo.exchangerate.util.Validator.requireNonNull;
  */
 public class CurrencyController extends BaseController<CurrencyFragmentView, CurrencyModel> {
 
-	private static List<Rate> rates;
+	private static List<Currency> currencies;
 
-	private Rate selectedRate;
-	private ArrayAdapter<Rate> adapter;
+	private Currency selectedCurrency;
+	private ArrayAdapter<Currency> adapter;
 
 	public void init() {
-		selectedRate = null;
+		selectedCurrency = null;
 		model.getConvertButton().setEnabled(false);
 		model.getCurrency().setText("");
 		showName();
@@ -46,7 +46,7 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 	}
 
 	public void getCurrencySymbols() {
-		if (rates == null) {
+		if (currencies == null) {
 			BitcoinAverageRestClient.loadCurrencies(this::onSuccessLoadCurrencies, this::onFailureLoadCurrencies);
 		} else {
 			fillRateAutoCompleteAdapter();
@@ -55,10 +55,10 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 
 	private void onSuccessLoadCurrencies(JSONObject response) {
 		try {
-			rates = convertToRateList(response);
+			currencies = convertToRateList(response);
 			fillRateAutoCompleteAdapter();
 		} catch (Exception e) {
-			rates = null;
+			currencies = null;
 			handleException(view.getActivity(), e, view.getString(R.string.error_internal_problem));
 		}
 	}
@@ -67,34 +67,34 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 		handleException(view.getActivity(), throwable, view.getString(R.string.error_connection_problem));
 	}
 
-	private List<Rate> convertToRateList(JSONObject response) throws JSONException {
+	private List<Currency> convertToRateList(JSONObject response) throws JSONException {
 		JSONObject ratesObject = response.getJSONObject("rates");
 		Iterator<String> rateNames = ratesObject.keys();
-		List<Rate> rates = new LinkedList<>();
+		List<Currency> currencies = new LinkedList<>();
 		while (rateNames.hasNext()) {
 			String symbol = rateNames.next();
 			JSONObject rateObject = (JSONObject) ratesObject.get(symbol);
-			Rate rate = new Rate(symbol, rateObject.getDouble("rate"), rateObject.getString("name"));
-			rates.add(rate);
+			Currency currency = new Currency(symbol, rateObject.getDouble("rate"), rateObject.getString("name"));
+			currencies.add(currency);
 		}
-		return rates;
+		return currencies;
 	}
 
 	private void fillRateAutoCompleteAdapter() {
 		model.getConvertButton().setEnabled(true);
-		logger.info("Rate list size is : %s", rates.size());
-		adapter = new ArrayAdapter<>(view.getActivity(), android.R.layout.simple_dropdown_item_1line, rates);
+		logger.info("Rate list size is : %s", currencies.size());
+		adapter = new ArrayAdapter<>(view.getActivity(), android.R.layout.simple_dropdown_item_1line, currencies);
 		model.getCurrency().setAdapter(adapter);
 		model.getCurrency().setOnItemClickListener(this::selectRate);
 	}
 
 	private void selectRate(AdapterView<?> parent, View view, int position, long id) {
-		selectedRate = adapter.getItem(position);
-		logger.info("onItemClick id is %s and position is %s and symbol is %s !!!", id, position, selectedRate == null ? null : selectedRate.getSymbol());
+		selectedCurrency = adapter.getItem(position);
+		logger.info("onItemClick id is %s and position is %s and symbol is %s !!!", id, position, selectedCurrency == null ? null : selectedCurrency.getSymbol());
 	}
 
 	public void convert(View v) {
-		requireNonNull(selectedRate, view, R.string.error_empty_selected_rate);
-		goToFragment(view, FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedRate);
+		requireNonNull(selectedCurrency, view, R.string.error_empty_selected_currency);
+		goToFragment(view, FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedCurrency);
 	}
 }
