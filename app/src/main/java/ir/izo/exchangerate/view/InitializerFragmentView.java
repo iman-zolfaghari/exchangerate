@@ -2,20 +2,16 @@ package ir.izo.exchangerate.view;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.controller.InitializerController;
 import ir.izo.exchangerate.model.InitializerModel;
-
-import static ir.izo.exchangerate.util.AndroidUtil.handleException;
 
 /**
  * The home screen that gets name for next usage.
  */
 public class InitializerFragmentView extends BaseFragment {
-	private InitializerModel initializerModel;
-	private InitializerController initializerController;
+	private InitializerModel model;
+	private InitializerController controller;
 
 	@Override
 	protected int getFragmentLayoutId() {
@@ -27,31 +23,15 @@ public class InitializerFragmentView extends BaseFragment {
 		super.onViewCreated(view, savedInstanceState);
 		buildModel(view);
 
-		buildController();
+		controller = new InitializerController(this, model);
 
-		setActionListeners();
+		model.getAddNameButton().setOnClickListener(controller::addName);
 	}
 
 	private void buildModel(View view) {
-		initializerModel = new InitializerModel();
-		initializerModel.setAddNameButton((Button) view.findViewById(R.id.add_name_button));
-		initializerModel.setName((EditText) view.findViewById(R.id.name));
+		model = new InitializerModel();
+		model.setAddNameButton(view.findViewById(R.id.add_name_button));
+		model.setName(view.findViewById(R.id.name));
 	}
 
-	private void buildController() {
-		initializerController = new InitializerController(this, initializerModel);
-	}
-
-	private void setActionListeners() {
-		initializerModel.getAddNameButton().setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				try {
-					initializerController.addName();
-				} catch (Exception e) {
-					handleException(getActivity(), e, null);
-				}
-			}
-		});
-	}
 }

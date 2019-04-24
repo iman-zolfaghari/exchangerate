@@ -102,20 +102,15 @@ public class CurrencyController {
 		logger.info("Rate list size is : %s", rates.size());
 		adapter = new ArrayAdapter<>(view.getActivity(), android.R.layout.simple_dropdown_item_1line, rates);
 		model.getCurrency().setAdapter(adapter);
-		model.getCurrency().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				selectRate(position, id);
-			}
-		});
+		model.getCurrency().setOnItemClickListener(this::selectRate);
 	}
 
-	private void selectRate(int position, long id) {
+	private void selectRate(AdapterView<?> parent, View view, int position, long id) {
 		selectedRate = adapter.getItem(position);
 		logger.info("onItemClick id is %s and position is %s and symbol is %s !!!", id, position, selectedRate == null ? null : selectedRate.getSymbol());
 	}
 
-	public void convert() {
+	public void convert(View v) {
 		requireNonNull(selectedRate, view, R.string.error_empty_selected_rate);
 		goToFragment(view, FragmentEnum.FRAGMENT_CURRENCY_VALUE, selectedRate);
 	}

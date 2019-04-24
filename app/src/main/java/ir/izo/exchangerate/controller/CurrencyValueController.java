@@ -38,7 +38,7 @@ public class CurrencyValueController {
 	private void init() {
 		rate = (Rate) view.getArguments().getSerializable(BUNDLE_DATA);
 		requireNonNull(rate, view, R.string.error_empty_selected_rate);
-		model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), "?", "?"));
+		model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), "?", 0.0));
 
 		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 			@Override
@@ -71,7 +71,11 @@ public class CurrencyValueController {
 
 	}
 
-	public void back() {
-		goBack(view);
+	public void back(View v) {
+		try {
+			goBack(view);
+		} catch (Exception e) {
+			handleException(view.getActivity(), e, null);
+		}
 	}
 }

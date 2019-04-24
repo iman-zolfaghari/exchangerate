@@ -1,5 +1,6 @@
 package ir.izo.exchangerate.controller;
 
+import android.view.View;
 import ir.izo.exchangerate.R;
 import ir.izo.exchangerate.config.ApplicationConfig;
 import ir.izo.exchangerate.enums.ConfigEnum;
@@ -9,6 +10,7 @@ import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.InitializerFragmentView;
 
 import static ir.izo.exchangerate.util.AndroidUtil.goToFragmentWithoutBackStack;
+import static ir.izo.exchangerate.util.AndroidUtil.handleException;
 import static ir.izo.exchangerate.util.Validator.requireNonEmpty;
 
 /**
@@ -25,13 +27,17 @@ public class InitializerController {
 		this.model = model;
 	}
 
-	public void addName() {
-		String name = model.getName().getText().toString();
-		logger.info("The name is %s.", name);
+	public void addName(View v) {
+		try {
+			String name = model.getName().getText().toString();
+			logger.info("The name is %s.", name);
 
-		requireNonEmpty(name, view, R.string.error_invalid_name);
+			requireNonEmpty(name, view, R.string.error_invalid_name);
 
-		ApplicationConfig.store(ConfigEnum.NAME, name);
-		goToFragmentWithoutBackStack(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY, null);
+			ApplicationConfig.store(ConfigEnum.NAME, name);
+			goToFragmentWithoutBackStack(view.getActivity(), FragmentEnum.FRAGMENT_CURRENCY, null);
+		} catch (Exception e) {
+			handleException(view.getActivity(), e, null);
+		}
 	}
 }

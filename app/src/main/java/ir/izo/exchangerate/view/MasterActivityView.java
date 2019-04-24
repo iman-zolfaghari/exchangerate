@@ -7,7 +7,7 @@ import ir.izo.exchangerate.controller.MasterController;
 
 public class MasterActivityView extends AppCompatActivity {
 
-	private MasterController masterController;
+	private MasterController controller;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -16,16 +16,12 @@ public class MasterActivityView extends AppCompatActivity {
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 		getSupportActionBar().setIcon(R.drawable.ic_launcher);
 
-		buildController();
-	}
-
-	private void buildController() {
-		masterController = new MasterController(this);
+		controller = new MasterController(this);
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		masterController.onStart();
+		controller.onStart();
 	}
 }
