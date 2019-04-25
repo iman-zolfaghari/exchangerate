@@ -15,7 +15,6 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import static ir.izo.exchangerate.restclient.BitcoinAverageRestClient.convertToCurrencyList;
 import static ir.izo.exchangerate.util.AndroidUtil.goToFragment;
 import static ir.izo.exchangerate.util.AndroidUtil.handleException;
 import static ir.izo.exchangerate.util.Validator.requireNonNull;
@@ -29,8 +28,10 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 
 	private Currency selectedCurrency;
 	private ArrayAdapter<Currency> adapter;
+	private BitcoinAverageRestClient bitcoinAverageRestClient;
 
 	public void init() {
+		bitcoinAverageRestClient = new BitcoinAverageRestClient();
 		selectedCurrency = null;
 		model.getConvertButton().setEnabled(false);
 		model.getCurrency().setText(null);
@@ -45,7 +46,7 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 
 	public void getCurrencySymbols() {
 		if (currencies == null) {
-			BitcoinAverageRestClient.loadCurrencies(this::onSuccessLoadCurrencies, this::onFailureLoadCurrencies);
+			bitcoinAverageRestClient.loadCurrencies(this::onSuccessLoadCurrencies, this::onFailureLoadCurrencies);
 		} else {
 			fillRateAutoCompleteAdapter();
 		}
@@ -53,7 +54,7 @@ public class CurrencyController extends BaseController<CurrencyFragmentView, Cur
 
 	private void onSuccessLoadCurrencies(JSONObject response) {
 		try {
-			currencies = convertToCurrencyList(response);
+			currencies = bitcoinAverageRestClient.convertToCurrencyList(response);
 			fillRateAutoCompleteAdapter();
 		} catch (Exception e) {
 			currencies = null;

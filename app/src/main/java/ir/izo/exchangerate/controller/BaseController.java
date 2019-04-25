@@ -5,7 +5,7 @@ import ir.izo.exchangerate.util.Logger;
 import ir.izo.exchangerate.view.MyView;
 
 public abstract class BaseController<V extends MyView, M extends Model> implements Controller<V, M> {
-	protected final Logger logger = new Logger(getClass().getName());
+	protected Logger logger = new Logger(getClass().getName());
 
 	protected V view;
 	protected M model;

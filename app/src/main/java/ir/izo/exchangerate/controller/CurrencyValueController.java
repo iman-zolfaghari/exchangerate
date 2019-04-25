@@ -20,13 +20,15 @@ import static ir.izo.exchangerate.util.Validator.requireNonNull;
 public class CurrencyValueController extends BaseController<CurrencyValueFragmentView, CurrencyValueModel> {
 
 	private Currency currency;
+	private BitcoinAverageRestClient bitcoinAverageRestClient;
 
 	public void init() {
+		bitcoinAverageRestClient = new BitcoinAverageRestClient();
 		currency = (Currency) view.getArguments().getSerializable(BUNDLE_DATA);
 		requireNonNull(currency, view, R.string.error_empty_selected_currency);
 		model.getCurrencyValue().setText(String.format(view.getString(R.string.message_currency_value), "?", 0.0));
 
-		BitcoinAverageRestClient.loadBitcoinPrice(currency.getSymbol(), this::onStartLoadCurrencyValue,
+		bitcoinAverageRestClient.loadBitcoinPrice(currency.getSymbol(), this::onStartLoadCurrencyValue,
 				this::onFinishLoadCurrencyValue, this::onSuccessLoadCurrencyValue, this::onFailureLoadCurrencyValue);
 	}
 

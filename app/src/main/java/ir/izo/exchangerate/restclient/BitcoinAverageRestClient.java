@@ -28,11 +28,11 @@ public class BitcoinAverageRestClient {
 		client.setMaxRetriesAndTimeout(3, 5000);
 	}
 
-	public static void get(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
+	public void get(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
 		client.get(getAbsoluteUrl(url), params, responseHandler);
 	}
 
-	public static void get(String url, RequestParams params, Action onStartAction, Action onFinishAction, Consumer<JSONObject> onSuccessConsumer, Consumer<Throwable> onFailureConsumer) {
+	public void get(String url, RequestParams params, Action onStartAction, Action onFinishAction, Consumer<JSONObject> onSuccessConsumer, Consumer<Throwable> onFailureConsumer) {
 		client.get(getAbsoluteUrl(url), params, new JsonHttpResponseHandler() {
 
 			@Override
@@ -62,25 +62,25 @@ public class BitcoinAverageRestClient {
 		});
 	}
 
-	private static String getAbsoluteUrl(String relativeUrl) {
+	private String getAbsoluteUrl(String relativeUrl) {
 		return BASE_URL + relativeUrl;
 	}
 
-	public static void post(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
+	public void post(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
 		client.post(getAbsoluteUrl(url), params, responseHandler);
 	}
 
-	public static void loadBitcoinPrice(String to, Action onStartAction, Action onFinishAction, Consumer<JSONObject> onSuccessConsumer, Consumer<Throwable> onFailureConsumer) {
+	public void loadBitcoinPrice(String to, Action onStartAction, Action onFinishAction, Consumer<JSONObject> onSuccessConsumer, Consumer<Throwable> onFailureConsumer) {
 		RequestParams params = new RequestParams("from", "BTC", "to", to, "amount", 1);
-		BitcoinAverageRestClient.get(URL_CONVERT_GLOBAL, params, onStartAction, onFinishAction, onSuccessConsumer, onFailureConsumer);
+		get(URL_CONVERT_GLOBAL, params, onStartAction, onFinishAction, onSuccessConsumer, onFailureConsumer);
 	}
 
-	public static void loadCurrencies(Consumer<JSONObject> onSuccessConsumer, Consumer<Throwable> onFailureConsumer) {
-		BitcoinAverageRestClient.get(URL_CURRENCIES, null, null, null, onSuccessConsumer, onFailureConsumer);
+	public void loadCurrencies(Consumer<JSONObject> onSuccessConsumer, Consumer<Throwable> onFailureConsumer) {
+		get(URL_CURRENCIES, null, null, null, onSuccessConsumer, onFailureConsumer);
 	}
 
 
-	public static List<Currency> convertToCurrencyList(JSONObject response) throws JSONException {
+	public List<Currency> convertToCurrencyList(JSONObject response) throws JSONException {
 		JSONObject ratesObject = response.getJSONObject("rates");
 		Iterator<String> rateNames = ratesObject.keys();
 		List<Currency> currencies = new LinkedList<>();
